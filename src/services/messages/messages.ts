@@ -18,6 +18,8 @@ import type { Application } from '../../declarations'
 import { MessageService, getOptions } from './messages.class'
 import { messagePath, messageMethods } from './messages.shared'
 
+import { logRuntime } from '../../hooks/log-runtime'
+
 export * from './messages.class'
 export * from './messages.schema'
 
@@ -34,6 +36,7 @@ export const message = (app: Application) => {
   app.service(messagePath).hooks({
     around: {
       all: [
+        logRuntime,
         authenticate('jwt'),
         schemaHooks.resolveExternal(messageExternalResolver),
         schemaHooks.resolveResult(messageResolver)
